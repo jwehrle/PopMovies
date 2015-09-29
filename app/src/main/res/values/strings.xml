@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PopMovies</string>
+    <string name="action_settings">Settings</string>
+    <string name="pref_sort_key">sort_by</string>
+    <string name="default_sort">popularity.desc</string>
+    <string name="favorite_button">MARK AS FAVORITE</string>
+    <string name="theMovieDbBaseURL">http://api.themoviedb.org/3/discover/movie</string>
+</resources>
