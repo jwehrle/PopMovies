@@ -2,6 +2,7 @@ package jwehrle.popmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -10,12 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import java.util.List;
 
 /**
  * Package: jwehrle.popmovies
- * Class: MainActivity
+ * Class: MainActivity extends ActionBarActivity
  * Author: John Wehrle
  * Date: 9/29/15
  * Purpose: Driver for a movie app that uses The Movie Data Base API with a student API key. This
@@ -43,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
      * mGridView with movie poster images.
      * Finally, we set a clickListener on mGridView and handle that event with an Intent. We
      * pass a Movie object along with that intent to a new MovieDetailActivity and start it.
-     * @param savedInstanceState
+     * @param savedInstanceState The state of this Activity at Creation.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,5 +114,25 @@ public class MainActivity extends ActionBarActivity {
                 preferences.getString(
                         getString(R.string.pref_sort_key), getString(R.string.default_sort)),
                 getString(R.string.themoviedb_student_api_key));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        setContentView(R.layout.grid_layout);
+        int orientation = newConfig.orientation;
+        switch (orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+                mGridView.setNumColumns(2);
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                mGridView.setNumColumns(3);
+                Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+
+
+        //fetchMovies();
     }
 }

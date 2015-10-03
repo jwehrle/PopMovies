@@ -18,34 +18,68 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jwehrle on 9/16/15.
+ * Package: jwehrle.popmovies
+ * Class: FetchMoviesTask extends AsyncTas
+ * Author: John Wehrle
+ * Date: 9/29/15
+ * Purpose: This AsyncTask retrieves a JSON String from www.themoviedb.com, parses that String into
+ * an ArrayList of Movie objects, and, resets its MovieImageAdapter to these new Movie objects - all
+ * of which has the result of filling the MainActivity UI GridView with the downloaded movies and
+ * their poster images.
+ * Disclosure: This app is an implementation of a Udacity course assignment.
+ * Members:
+ * String LOG_TAG: for logging errors.
+ * Context context: a reference to the parent Activity.
+ * MovieImageAdapter movieImageAdapter: A custom Base Adapter to adapt Movie objects to GridViews.
  */
 public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>>{
 
-    private String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-    private final String JSON_ARRAY_KEY = "results";
-    Context context;
-    MovieImageAdapter movieImageAdapter;
+    private String LOG_TAG = FetchMoviesTask.class.getSimpleName(); //Aids error tracking
+    Context context;    //a reference to the parent Activity
+    MovieImageAdapter movieImageAdapter;    //custom Base Adapter for Movie objects
 
+    /**
+     * FetchMoviesTask()
+     * Constructor sets Context and MovieImageAdapter
+     * @param context   //the Context of the parent Activity
+     * @param movieImageAdapter //the MovieImageAdapter to be filled
+     */
     FetchMoviesTask(Context context, MovieImageAdapter movieImageAdapter){
         this.context = context;
         this.movieImageAdapter = movieImageAdapter;
     }
 
-    private List<Movie> getMovies(String moviesJSONString) throws JSONException {
+    /**
+     * getMovieListFromJSON()
+     * Parses JSON String into a List of Movie objects.
+     * @param moviesJSONString: The JSON String containing all of the movie information
+     * @return moviesList: The List of Movie objects
+     * @throws JSONException: JSON parsing may fail
+     */
+    private List<Movie> getMovieListFromJSON(String moviesJSONString) throws JSONException {
+        final String JSON_ARRAY_KEY = "results";    //key for JSON Array of movies
         JSONObject popularMovies = new JSONObject(moviesJSONString);
         JSONArray posterArray = popularMovies.getJSONArray(JSON_ARRAY_KEY);
-        List<Movie> movies = new ArrayList<>();
+        List<Movie> moviesList = new ArrayList<>();
         JSONObject movieJSON;
         Movie movie;
         for(int i = 0; i < posterArray.length(); i++) {
             movieJSON = posterArray.getJSONObject(i);
             movie = new Movie(movieJSON.toString());
-            movies.add(movie);
+            moviesList.add(movie);
         }
-        return movies;
+        return moviesList;
     }
 
+    /**
+     * fetchJSONString()
+     * Downloads and returns the JSON String of movie information.
+     * @param urlString:    The url source
+     * @param urlConnection:    The HttpURLConnection used to download the JSON String
+     * @param reader:   The BufferReader used to read the downloaded content
+     * @return StringBuffer.toString(): The downloaded JSON String
+     * @throws IOException: The HttpURLConnection may fail.
+     */
     private String fetchJSONString(String urlString, HttpURLConnection urlConnection,
                                    BufferedReader reader ) throws IOException {
         URL url = new URL(urlString);
@@ -57,15 +91,19 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>>{
         if (inputStream == null) { return null; }
         reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
-        while ((line = reader.readLine()) != null) { buffer.append(line + "\n"); }
+        while ((line = reader.readLine()) != null) { buffer.append(line).append("\n"); }
         if (buffer.length() == 0) { return null; }
         return buffer.toString();
     }
 
     /**
-     *
+     * doInBackground()
+     * Downloads and parses a JSON String into a List of Movie objects based on the params passed.
+     * Calls:
+     *  fetchJSONString()
+     *  getMovieListFromJSON()
      * @param params : Array of 3 elements {base url, sorting preference, api key}
-     * @return
+     * @return a List of Movie objects
      */
     @Override
     protected List<Movie> doInBackground(String... params) {
@@ -91,7 +129,7 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>>{
             }
         }
         try {
-            return getMovies(moviesJSONString);
+            return getMovieListFromJSON(moviesJSONString);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -99,9 +137,14 @@ public class FetchMoviesTask extends AsyncTask<String, Void, List<Movie>>{
         }
     }
 
+    /**
+     * onPostExecute()
+     * Resets FetchMoviesTask.movieImageAdapter with the new List of Movie objects.
+     * @param movieList:    The new List of Movie objects
+     */
     @Override
-    protected void onPostExecute(List<Movie> movies) {
+    protected void onPostExecute(List<Movie> movieList) {
         movieImageAdapter.clear();
-        movieImageAdapter.addAll(movies);
+        movieImageAdapter.addAll(movieList);
     }
 }

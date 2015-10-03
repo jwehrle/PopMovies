@@ -1,8 +1,26 @@
 <resources>
+    '<!--'Name of this application '-->'
     <string name="app_name">PopMovies</string>
+    '<!--'Name of the SettingsActivity '-->'
     <string name="action_settings">Settings</string>
+    '<!--'Query parameter for themoviedb.org for sorting '-->'
     <string name="pref_sort_key">sort_by</string>
+    '<!--'Query parameter for themoviedb.org '-->'
     <string name="default_sort">popularity.desc</string>
+    '<!--'Text for favorite button '-->'
     <string name="favorite_button">MARK AS FAVORITE</string>
+    '<!--'Base url for themoviedb.org '-->'
     <string name="theMovieDbBaseURL">http://api.themoviedb.org/3/discover/movie</string>
+    '<!--'Appended to Ratings '-->'
+    <string name="divided_by_ten">/10</string>
+    '<!--'Content description of poster thumbnail '-->'
+    <string name="thumbnail_content_description">A Thumbnail image of the selected movie</string>
+    '<!--'Used for layout testing '-->'
+    <string name="sample_text">Sample Text</string>
+    '<!--'used for layout testing '-->'
+    <string name="sample_overview">This sample synopsis crackles with an electric plotline!</string>
+    '<!--'Prepended to release date '-->'
+    <string name="released">Released:</string>
+    '<!--'Prepended to ratings '-->'
+    <string name="rating">Rating:</string>
 </resources>

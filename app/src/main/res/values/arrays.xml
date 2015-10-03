@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    '<!--'Settings options '-->'
     <string-array name="sortLabels">
         <item>Popularity</item>
         <item>Rating</item>
