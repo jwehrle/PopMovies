@@ -2,7 +2,6 @@ package jwehrle.popmovies;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -11,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -114,25 +112,5 @@ public class MainActivity extends ActionBarActivity {
                 preferences.getString(
                         getString(R.string.pref_sort_key), getString(R.string.default_sort)),
                 getString(R.string.themoviedb_student_api_key));
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        setContentView(R.layout.grid_layout);
-        int orientation = newConfig.orientation;
-        switch (orientation) {
-            case Configuration.ORIENTATION_PORTRAIT:
-                mGridView.setNumColumns(2);
-                break;
-            case Configuration.ORIENTATION_LANDSCAPE:
-                mGridView.setNumColumns(3);
-                Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-
-
-        //fetchMovies();
     }
 }
